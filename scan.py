@@ -8,8 +8,20 @@ parser.add_argument("-r", "--range", type=str, help="Range de ports à scanner, 
 parser.add_argument("-i", "--ip", type=str, required=True, help="IP sélectionnée pour le scan")
 args = parser.parse_args()
 
+service = {
+    1337: "Skibi-TCP"
+    }
+
+
+#===========Affichage de l'en-tête============
+def entete():
+    print("╔══════════════════════════════════════╗")
+    print("║          ▪ SCAN DE PORTS ▪           ║")
+    print("╚══════════════════════════════════════╝ \n")
+
 #===============================Fonction pour le Scan===============================
 def scan(ip_target, port_target):
+    global service
 
     # Essaie de convertir la chaîne en adresse binaire
     try:
@@ -28,14 +40,17 @@ def scan(ip_target, port_target):
         s.settimeout(3)
         try:
             s.connect((ip_target, port_target))
-            print(f"{ip_target}:{port_target} — Connexion valide")
+            
+            if port_target in service:
+                print(f"[{ip_target}:{port_target}] | {service[port_target]} → Connexion établis [✓]")
         except (socket.timeout, ConnectionRefusedError):
-            print(f"{ip_target}:{port_target} — fermé / pas de connexion")
+            print(f"[{ip_target}:{port_target}] → Fermé / connexion invalide [✗]")
         except OSError as e:
             print(f"{ip_target}:{port_target} — erreur réseau: {e}")
 #===================================================================================
 
 if __name__ == "__main__":
+    entete()
     try:
         ports_to_scan = []
 
@@ -51,7 +66,7 @@ if __name__ == "__main__":
                     print("Erreur : range de ports invalide (0-65535)")
                     sys.exit(1)
                 ports_to_scan.extend(range(start, end + 1))
-            #
+            
             except ValueError:
                 print("Erreur : range invalide, ex: 20-30")
                 sys.exit(1)
