@@ -81,27 +81,6 @@ python3 scan.py -i 192.168.1.1 -p 80
 | `-p, --port` | Port(s) spécifique(s) à scanner | `-p 80 443 22` |
 | `-r, --range` | Plage de ports à scanner | `-r 20-100` |
 
-## 🔍 Services détectés
-
-Le scanner identifie automatiquement plus de 70 services courants :
-- **Web** : HTTP (80), HTTPS (443)
-- **Administration** : SSH (22), RDP (3389), VNC (5900)
-- **Base de données** : MySQL (3306), PostgreSQL (5432), MongoDB (27017)
-- **Et bien d'autres...**
-
-## 📝 Exemples d'utilisation
-
-```bash
-# Scan rapide des ports web
-portscan -i example.com -p 80 443
-
-# Audit de sécurité basique
-portscan -i 192.168.1.100 -r 1-1000
-
-# Vérification des services de base
-portscan -i 10.0.0.1 -p 22 23 53 80 443
-```
-
 ## ⚠️ Avertissement
 
 Cet outil est destiné à des fins éducatives et de test sur vos propres systèmes ou avec autorisation explicite. L'utilisation non autorisée pour scanner des systèmes tiers peut être illégale.
