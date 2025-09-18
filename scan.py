@@ -1,7 +1,6 @@
 import argparse
 import socket
 import sys
-import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--port", type=int, nargs="+", help="Port(s) à scanner")
@@ -58,7 +57,6 @@ if __name__ == "__main__":
                 sys.exit(1)
 
         for port in ports_to_scan:  # Boucle sur tous les ports de "ports_to_scan"
-            time.sleep(0.1)
             scan(args.ip, port)
 
     except KeyboardInterrupt:
