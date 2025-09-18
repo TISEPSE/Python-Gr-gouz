@@ -1,6 +1,7 @@
 import argparse
 import socket
 import sys
+import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--port", type=int, nargs="+", help="Port(s) à scanner")
@@ -41,21 +42,23 @@ if __name__ == "__main__":
 
         # Ports manuels
         if args.port:
-            #Si l'argument est "-p / --port" alors on ajoute les ports de la commande dans "ports_to_scan"
             ports_to_scan.extend(args.port)
 
         # Range
-        if args.range: #ex: 25-106
+        if args.range:  # ex: 25-106
             try:
-                start, end = map(int, args.range.split('-')) #ex: ["20", "106"] => 20, 106
-                ports_to_scan.extend(range(start, end+1)) #On attribue start = 20 et end = 25
-                
-                #Si ya une erreur on print() et on sort du programme
+                start, end = map(int, args.range.split('-'))  # ex: ["20", "106"] => 20, 106
+                if start < 0 or end > 65535 or start > end:
+                    print("Erreur : range de ports invalide (0-65535)")
+                    sys.exit(1)
+                ports_to_scan.extend(range(start, end + 1))
+            #
             except ValueError:
                 print("Erreur : range invalide, ex: 20-30")
                 sys.exit(1)
 
-        for port in ports_to_scan: #Boucle sur tout les ports de "ports_to_scan"
+        for port in ports_to_scan:  # Boucle sur tous les ports de "ports_to_scan"
+            time.sleep(0.1)
             scan(args.ip, port)
 
     except KeyboardInterrupt:
