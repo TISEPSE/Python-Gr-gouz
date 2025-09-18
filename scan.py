@@ -9,8 +9,75 @@ parser.add_argument("-i", "--ip", type=str, required=True, help="IP sélectionn�
 args = parser.parse_args()
 
 service = {
-    1337: "Skibi-TCP"
-    }
+    7: "Echo",
+    20: "FTP-DATA",
+    21: "FTP",
+    22: "SSH",
+    23: "Telnet",
+    25: "SMTP",
+    37: "Time",
+    53: "DNS",
+    67: "DHCP Server",
+    68: "DHCP Client",
+    69: "TFTP",
+    79: "Finger",
+    80: "HTTP",
+    88: "Kerberos",
+    110: "POP3",
+    119: "NNTP",
+    123: "NTP",
+    135: "Microsoft RPC",
+    137: "NetBIOS Name Service",
+    138: "NetBIOS Datagram Service",
+    139: "NetBIOS Session Service",
+    143: "IMAP",
+    161: "SNMP",
+    162: "SNMP Trap",
+    179: "BGP",
+    389: "LDAP",
+    443: "HTTPS",
+    445: "Microsoft SMB",
+    465: "SMTPS",
+    514: "Syslog",
+    515: "LPR/LPD",
+    587: "SMTP Submission",
+    631: "IPP",
+    636: "LDAPS",
+    873: "Rsync",
+    993: "IMAPS",
+    995: "POP3S",
+    1080: "SOCKS Proxy",
+    1194: "OpenVPN",
+    1433: "Microsoft SQL Server",
+    1521: "Oracle Database",
+    1723: "PPTP",
+    1883: "MQTT",
+    2049: "NFS",
+    2181: "Apache Zookeeper",
+    2222: "SSH Alternate",
+    2375: "Docker REST API",
+    2376: "Docker REST API (TLS)",
+    3000: "TCP / UDP",
+    3306: "MySQL",
+    3389: "RDP",
+    3690: "Subversion",
+    4444: "Metasploit",
+    5000: "Flask/Python Dev Server",
+    5432: "PostgreSQL",
+    5672: "AMQP",
+    5900: "VNC",
+    6379: "Redis",
+    6667: "IRC",
+    7000: "Cassandra",
+    8000: "HTTP Alternate",
+    8080: "HTTP Proxy/Alternate",
+    8443: "HTTPS Alternate",
+    8888: "Jupyter Notebook",
+    9000: "SonarQube",
+    9200: "Elasticsearch",
+    9418: "Git",
+    27017: "MongoDB"
+}
 
 
 #===========Affichage de l'en-tête============
@@ -28,7 +95,7 @@ def scan(ip_target, port_target):
         socket.inet_aton(ip_target)
     except socket.error:
         print(f"{ip_target} — Adresse IP invalide, veuillez saisir une IPv4 correcte")
-        return
+        sys.exit(1)
 
     # Vérifie que le port indiqué est dans la gamme des ports valide
     if port_target < 0 or port_target > 65535:
@@ -41,10 +108,14 @@ def scan(ip_target, port_target):
         try:
             s.connect((ip_target, port_target))
             
+            # Si une connexion est valide on affiche son service 
             if port_target in service:
-                print(f"[{ip_target}:{port_target}] | {service[port_target]} → Connexion établis [✓]")
+                print(f"[{ip_target}:{port_target}] | {service[port_target]} → Connexion établie [✓] \n")
+            else:
+                print(f"[{ip_target}:{port_target}] → Service inconnu\n")
+            # Sinon rien et on continue
         except (socket.timeout, ConnectionRefusedError):
-            print(f"[{ip_target}:{port_target}] → Fermé / connexion invalide [✗]")
+            return
         except OSError as e:
             print(f"{ip_target}:{port_target} — erreur réseau: {e}")
 #===================================================================================
