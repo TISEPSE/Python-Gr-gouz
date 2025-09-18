@@ -15,36 +15,61 @@ Un scanner de ports simple et efficace en Python pour analyser les ports ouverts
 - Python 3.6 ou supérieur
 - Aucune dépendance externe (utilise uniquement les modules standards)
 
-## ⚡ Installation rapide
+## ⚡ Installation automatique (recommandée)
 
 ```bash
 # Cloner le projet
 git clone https://github.com/votre-username/Scanner-IP-PORTS.git
 cd Scanner-IP-PORTS
 
-# Rendre le script exécutable (optionnel)
+# Installation automatique avec alias 'portscan'
+./install.sh
+```
+
+**L'installation automatique configure :**
+- ✅ Permissions d'exécution
+- ✅ Alias global `portscan`
+- ✅ Compatible bash/zsh
+- ✅ Configuration automatique du shell
+
+## 📦 Installation manuelle
+
+```bash
+# Cloner le projet
+git clone https://github.com/votre-username/Scanner-IP-PORTS.git
+cd Scanner-IP-PORTS
+
+# Rendre le script exécutable
 chmod +x scan.py
+
+# Ajouter l'alias manuellement à votre ~/.bashrc ou ~/.zshrc
+echo "alias portscan='$(pwd)/scan.py'" >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ## 💻 Utilisation
 
-### Méthode 1 : Avec Python
+### ⭐ Méthode recommandée : Avec l'alias portscan
 ```bash
 # Scanner un port spécifique
-python scan.py -i 192.168.1.1 -p 80
+portscan -i 192.168.1.1 -p 80
 
 # Scanner plusieurs ports
-python scan.py -i 192.168.1.1 -p 22 80 443
+portscan -i 192.168.1.1 -p 22 80 443
 
 # Scanner une plage de ports
-python scan.py -i 192.168.1.1 -r 20-100
+portscan -i 192.168.1.1 -r 20-100
 
 # Combiner ports spécifiques et plage
-python scan.py -i 192.168.1.1 -p 22 443 -r 8000-8080
+portscan -i 192.168.1.1 -p 22 443 -r 8000-8080
 ```
 
-### Méthode 2 : Exécution directe (après chmod +x)
+### Autres méthodes
 ```bash
+# Avec Python directement
+python3 scan.py -i 192.168.1.1 -p 80
+
+# Exécution directe du script
 ./scan.py -i 192.168.1.1 -p 80
 ```
 
@@ -68,13 +93,13 @@ Le scanner identifie automatiquement plus de 70 services courants :
 
 ```bash
 # Scan rapide des ports web
-python scan.py -i example.com -p 80 443
+portscan -i example.com -p 80 443
 
 # Audit de sécurité basique
-python scan.py -i 192.168.1.100 -r 1-1000
+portscan -i 192.168.1.100 -r 1-1000
 
 # Vérification des services de base
-python scan.py -i 10.0.0.1 -p 22 23 53 80 443
+portscan -i 10.0.0.1 -p 22 23 53 80 443
 ```
 
 ## ⚠️ Avertissement
