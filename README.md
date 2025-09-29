@@ -7,7 +7,6 @@ Un scanner de ports simple et efficace en Python pour analyser les ports ouverts
 - Scan de ports individuels ou par plages
 - Identification automatique des services associés aux ports
 - Interface en ligne de commande intuitive
-- Gestion d'erreurs robuste
 - Timeout configurable pour éviter les blocages
 
 ## 📋 Prérequis
@@ -30,7 +29,6 @@ cd Scanner-IP-PORTS
 - ✅ Permissions d'exécution
 - ✅ Alias global `portscan`
 - ✅ Compatible bash/zsh
-- ✅ Configuration automatique du shell
 
 ## 📦 Installation manuelle
 
