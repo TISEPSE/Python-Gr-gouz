@@ -13,12 +13,19 @@ echo "║     Installation Scanner de Ports    ║"
 echo "╚══════════════════════════════════════╝"
 echo
 
-# Vérifier que Python 3 est installé
+# Vérifier que Python 3 est installé et obtenir sa version
 if ! command -v python3 &> /dev/null; then
     echo "❌ Erreur: Python 3 n'est pas installé"
-    echo "   Installez Python 3 avec: sudo apt install python3"
+    echo ""
+    echo "Pour installer Python 3 :"
+    echo "  • Ubuntu/Debian : sudo apt update && sudo apt install python3"
+    echo "  • Fedora/RHEL   : sudo dnf install python3"
+    echo "  • macOS         : brew install python3"
     exit 1
 fi
+
+PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
+echo "✅ Python $PYTHON_VERSION détecté"
 
 # Vérifier que le script scan.py existe
 if [ ! -f "$SCRIPT_PATH" ]; then
@@ -51,10 +58,14 @@ else
     fi
 fi
 
-echo "📁 Configuration détectée: $SHELL_CONFIG"
+echo "📁 Fichier de configuration: $SHELL_CONFIG"
+
+# Créer le fichier de config s'il n'existe pas
+touch "$SHELL_CONFIG"
 
 # Vérifier si l'alias existe déjà
 if grep -q "alias portscan=" "$SHELL_CONFIG" 2>/dev/null; then
+    echo ""
     echo "⚠️  L'alias 'portscan' existe déjà dans $SHELL_CONFIG"
     echo "   Voulez-vous le remplacer ? (y/N)"
     read -r response
@@ -62,8 +73,17 @@ if grep -q "alias portscan=" "$SHELL_CONFIG" 2>/dev/null; then
         echo "❌ Installation annulée"
         exit 0
     fi
-    # Supprimer l'ancien alias
-    sed -i '/alias portscan=/d' "$SHELL_CONFIG"
+    # Supprimer l'ancien alias (compatible macOS et Linux)
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS (BSD sed)
+        sed -i '' '/alias portscan=/d' "$SHELL_CONFIG"
+        sed -i '' '/# Scanner de Ports IP - Alias automatique/d' "$SHELL_CONFIG"
+    else
+        # Linux (GNU sed)
+        sed -i '/alias portscan=/d' "$SHELL_CONFIG"
+        sed -i '/# Scanner de Ports IP - Alias automatique/d' "$SHELL_CONFIG"
+    fi
+    echo "✅ Ancien alias supprimé"
 fi
 
 # Ajouter l'alias
@@ -72,15 +92,20 @@ echo "# Scanner de Ports IP - Alias automatique" >> "$SHELL_CONFIG"
 echo "alias portscan='$SCRIPT_PATH'" >> "$SHELL_CONFIG"
 
 echo "✅ Alias 'portscan' ajouté à $SHELL_CONFIG"
-echo
-echo "🚀 Installation terminée !"
-echo
-echo "Pour utiliser immédiatement, exécutez :"
+echo ""
+echo "╔══════════════════════════════════════╗"
+echo "║    ✓ Installation terminée !         ║"
+echo "╚══════════════════════════════════════╝"
+echo ""
+echo "🔄 Pour utiliser immédiatement, exécutez :"
 echo "   source $SHELL_CONFIG"
-echo
-echo "Ou redémarrez votre terminal."
-echo
+echo ""
+echo "   Ou redémarrez votre terminal."
+echo ""
 echo "📖 Exemples d'utilisation :"
 echo "   portscan -i 192.168.1.1 -p 80"
-echo "   portscan -i example.com -r 20-100"
-echo
+echo "   portscan -i 127.0.0.1 -r 20-100"
+echo "   portscan -i example.com -p 22 80 443"
+echo ""
+echo "ℹ️  Pour tester : portscan -i 127.0.0.1 -p 80"
+echo ""
