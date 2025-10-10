@@ -22,7 +22,7 @@ Un scanner de ports simple et efficace en Python pour analyser les ports ouverts
 
 ```bash
 # 1. Cloner le projet
-git clone https://github.com/votre-username/Scanner-IP-PORTS.git
+git clone https://github.com/TISEPSE/Scanner-IP-PORTS.git
 cd Scanner-IP-PORTS
 
 # 2. Rendre le script d'installation exécutable
